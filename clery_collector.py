@@ -100,7 +100,8 @@ def concat_dataframes(main_df: pd.DataFrame,
         main_df = concat_df
     else:
         main_df = pd.concat([main_df, concat_df],
-                            join='outer', sort=False)
+                            join='outer', sort=False,
+                            ignore_index=True)
 
     return main_df, first_df
 
@@ -109,7 +110,7 @@ def concat_list_elements(a_list: list, to_concat: str) -> list:
     return [str(to_concat + '_' + item) for item in a_list]
 
 
-def export_dataframe(df: object, file_name: object) -> object:
+def export_dataframe(df: object, file_name: str):
     print('Exporting dataframe to ' + file_name + '...')
     df.to_csv(file_name)
     print('Successfully exported!')
@@ -131,12 +132,15 @@ def merge_dataframes(main_df: pd.DataFrame,
     return main_df, first_df
 
 
-def print_progress(current_step: int, first_step: int, last_step: int):
+def print_progress(current_step: int, first_step: int,
+                   last_step: int) -> str:
     steps = last_step - first_step
     progress = int(((current_step - first_step) / steps) * 100)
     progress_left = 100 - progress
     progress_bar = '[' + ('=' * progress) + (' ' * progress_left) + ']'
-    print(progress_bar + ' ' + str(progress) + '%')
+    readout = progress_bar + ' ' + str(progress) + '%'
+    print(readout)
+    return readout
 
 
 def set_filter_name(first_year: int, second_year: int,
@@ -154,11 +158,10 @@ def set_year_code(first_year: int, second_year: int,
             + '{:02d}'.format(third_year)
 
 
-def shorten_columns(df: pd.DataFrame) -> pd.DataFrame:
+def shorten_columns(df: pd.DataFrame, exclude=[]) -> pd.DataFrame:
     stat_list = list(df.columns)
-
     for index, column in enumerate(stat_list):
-        if column != COL_ID and column not in REDUNDANT_COLUMNS:
+        if column.upper() not in exclude:
             stat_list[index] = column[column.find('_')+1:]
 
     df.columns = stat_list
@@ -212,7 +215,8 @@ def main() -> None:
         print_progress(upper_year, FIRST_REPORTED_YEAR, LAST_REPORTED_YEAR)
 
     # delete report type from columns
-    master_df = shorten_columns(master_df)
+    exclude = REDUNDANT_COLUMNS + [COL_ID]
+    master_df = shorten_columns(master_df, exclude)
 
     # column sum code by user meteore from stack overflow
     # https://stackoverflow.com/questions/13078751/
