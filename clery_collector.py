@@ -61,7 +61,7 @@ def cleanly_import_data(file_name: str, filter1: str, filter2: str,
                         filter3: str, year: int, middle_year: int,
                         first_df: bool, report_type: str) \
                         -> pd.DataFrame:
-    df = pd.read_csv(FILE_PATH + file_name, low_memory=False)
+    df = pd.read_csv(file_name, low_memory=False)
 
     # capitalize all columns
     df.columns = [name.upper() for name in df.columns]
@@ -109,7 +109,7 @@ def concat_list_elements(a_list: list, to_concat: str) -> list:
     return [str(to_concat + '_' + item) for item in a_list]
 
 
-def export_dataframe(df: pd.DataFrame, file_name: str):
+def export_dataframe(df: object, file_name: object) -> object:
     print('Exporting dataframe to ' + file_name + '...')
     df.to_csv(file_name)
     print('Successfully exported!')
@@ -120,13 +120,13 @@ def grab_strings_from_list(a_list: list, grab: str) -> list:
 
 
 def merge_dataframes(main_df: pd.DataFrame,
-                     concat_df: pd.DataFrame,
+                     merge_df: pd.DataFrame,
                      first_df: bool) -> (pd.DataFrame, bool):
     if first_df:
         first_df = False
-        main_df = concat_df
+        main_df = merge_df
     else:
-        main_df = pd.merge(main_df, concat_df, on=COL_ID)
+        main_df = pd.merge(main_df, merge_df, on=COL_ID)
 
     return main_df, first_df
 
@@ -191,7 +191,7 @@ def main() -> None:
 
         for report_type in REPORT_TYPES:
             # generate file name
-            file_name = report_type + year_code + FILE_TYPE
+            file_name = FILE_PATH + report_type + year_code + FILE_TYPE
 
             report_df = cleanly_import_data(file_name, filter1, filter2,
                                             filter3, year, middle_year,
