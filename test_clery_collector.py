@@ -10,8 +10,6 @@
 # this assignment to a plagiarism checking service(which may then retain a
 # copy of this assignment on its database for the purpose of future
 # plagiarism checking).
-#
-# INCLUDES ALL REPORT TOTALS BY YEAR
 
 # IMPORT DEPENDENCIES & SET CONFIGURATION
 # #####################################################################

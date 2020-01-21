@@ -25,17 +25,17 @@ pd.set_option('display.width', 1000)
 
 # CONSTANT VARIABLES
 # #####################################################################
-# REPORT_TYPES = ['noncampusarrest', 'noncampuscrime',
-#                 'noncampusdiscipline', 'noncampushate',
-#                 'oncampusarrest', 'oncampuscrime',
-#                 'oncampusdiscipline', 'oncampushate',
-#                 'publicpropertyarrest', 'publicpropertycrime',
-#                 'publicpropertydiscipline', 'publicpropertyhate',
-#                 'reportedarrest', 'reportedcrime', 'reporteddiscipline',
-#                 'reportedhate', 'residencehallarrest',
-#                 'residencehallcrime', 'residencehalldiscipline',
-#                 'residencehallhate']
-REPORT_TYPES = ['noncampusarrest', 'noncampuscrime']
+REPORT_TYPES = ['noncampusarrest', 'noncampuscrime',
+                'noncampusdiscipline', 'noncampushate',
+                'oncampusarrest', 'oncampuscrime',
+                'oncampusdiscipline', 'oncampushate',
+                'publicpropertyarrest', 'publicpropertycrime',
+                'publicpropertydiscipline', 'publicpropertyhate',
+                'reportedarrest', 'reportedcrime', 'reporteddiscipline',
+                'reportedhate', 'residencehallarrest',
+                'residencehallcrime', 'residencehalldiscipline',
+                'residencehallhate']
+# REPORT_TYPES = ['noncampusarrest', 'noncampuscrime']
 COLUMN_TYPES = ['']
 FILE_TYPE = '.csv'
 FILE_PATH = 'data/'
