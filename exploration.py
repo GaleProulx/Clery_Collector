@@ -12,8 +12,16 @@
 # plagiarism checking).
 
 # IMPORT DEPENDENCIES & SET CONFIGURATION
-# #####################################################################
+# ############################################################################
 import pandas as pd
+import matplotlib.pyplot as plt
+import altair as alt
+
+from sklearn.linear_model import LinearRegression
+
+INFO_COLS = ['UNITID_P', 'INSTNM', 'BRANCH', 'ADDRESS', 'CITY', 'STATE',
+             'ZIP', 'SECTOR_CD', 'SECTOR_DESC', 'MEN_TOTAL',
+             'WOMEN_TOTAL', 'TOTAL', 'YEAR']
 
 # Display all columns.
 pd.set_option('display.max_columns', 20)
@@ -21,12 +29,76 @@ pd.set_option('display.max_columns', 20)
 pd.set_option('display.width', 1000)
 
 
-# MAIN
-# #####################################################################
-def main() -> None:
-    df = pd.read_csv('MASTER_DATAFRAME.csv')
+# IMPORT DEPENDENCIES & SET CONFIGURATION
+# ############################################################################
+def count_institutions_by_col(df: pd.DataFrame, column: str) -> (list, list):
+    filter_list = list()
+    institutions = list()
 
-    print(df.describe())
+    for val in df[column].unique():
+        filter_list.append(val)
+        institutions.append(df.loc[df[column] == val].shape[0])
+
+    return filter_list, institutions
+
+
+def import_clean_data(filename: str) -> pd.DataFrame:
+    df = pd.read_csv(filename)
+
+    # gather all crime columns with more than one crime reported
+    stat_cols = [col for col in df.columns if col not in INFO_COLS]
+    stat_cols = [col for col in stat_cols if df[col].sum() > 0]
+
+    # remove all rows with no crimes reported
+    important = df.loc[df[stat_cols].any(axis=1)]
+
+    # remove all 2 year institutions
+    important = important.loc[important['SECTOR_CD'] < 4]
+    important = important.loc[important['SECTOR_CD'] > 0]
+
+    # only include main campus and remove all columns with no crimes reported
+    important = important.loc[important['BRANCH'].str.contains('Main Campus',
+                                                               case=False,
+                                                               regex=False)]
+    important = important[stat_cols + INFO_COLS]
+
+    return important
+
+
+def linear_regression(features: pd.DataFrame, target: pd.DataFrame):
+    model = LinearRegression()
+    model.fit(features, target)
+
+    print("### LINEAR REGRESSION MODEL ###")
+    print("R-Squared Value: " + str(model.score(features, target)))
+    print("Intercept: " + str(model.intercept_))
+    print("Coefficients: " + str(model.coef_))
+
+
+def viz_scatterplot(x: list, y: list, title=None, x_label=None,
+                    y_label=None, y_lim=None):
+    ax = plt.subplot()
+    ax.set_title(title)
+    ax.scatter(x, y)
+    ax.set_ylabel(y_label)
+    ax.set_xlabel(x_label)
+    ax.set_ylim(y_lim)
+    plt.show()
+
+
+# MAIN
+# ############################################################################
+def main() -> None:
+    df = import_clean_data('MASTER_DATAFRAME.csv')
+
+    # Find number of institutions reporting crimes.
+    # x, y = count_institutions_by_col(df, 'YEAR')
+    # viz_scatterplot(x, y, title='Postsecondary 4 Year '
+    #                             'Institutions Reporting Crimes',
+    #                 x_label='Year',
+    #                 y_label='# of Institutions', y_lim=[0, 1500])
+
+    df.to_csv('FILTERED_MASTER.csv')
 
 
 if __name__ == "__main__":
