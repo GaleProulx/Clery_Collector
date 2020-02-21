@@ -37,9 +37,27 @@ def count_institutions_by_col(df: pd.DataFrame, column: str) -> (list, list):
 
     for val in df[column].unique():
         filter_list.append(val)
-        institutions.append(df.loc[df[column] == val].shape[0])
+        institutions.append(len(df.loc[df[column] == val]['INSTNM'].unique()))
 
     return filter_list, institutions
+
+
+def count_crimes(df: pd.DataFrame, x_var: str, y_var: list, legend=None):
+    if legend != None:
+        category = list(df[legend].unique())
+        stats = dict()
+        
+        for value in category:
+            stats[value] = list()
+    
+        # find all colleges that reported crimes in respective categories
+        x_axis = list()
+        for x in df[x_var].unique():
+            x_axis.append(x)
+            for value in category:
+                stats[value].append(df[y_var].loc[(df[x_var] == x) & (df[legend] == value)].sum().sum())
+                    
+    return list(df[x_var].unique()), stats
 
 
 def import_clean_data(filename: str) -> pd.DataFrame:
@@ -50,7 +68,7 @@ def import_clean_data(filename: str) -> pd.DataFrame:
     stat_cols = [col for col in stat_cols if df[col].sum() > 0]
 
     # remove all rows with no crimes reported
-    important = df.loc[df[stat_cols].any(axis=1)]
+    important = df[df[stat_cols].sum(axis=1) != 0]
 
     # remove all 2 year institutions
     important = important.loc[important['SECTOR_CD'] < 4]
@@ -79,7 +97,15 @@ def viz_scatterplot(x: list, y: list, title=None, x_label=None,
                     y_label=None, y_lim=None):
     ax = plt.subplot()
     ax.set_title(title)
-    ax.scatter(x, y)
+    
+    print(type(y))
+    print(isinstance(y, dict))
+    if isinstance(y, dict):
+        for key in y:
+            ax.scatter(x, y[key], label=key)
+            ax.legend(loc=2)
+    else:
+        ax.scatter(x, y)
     ax.set_ylabel(y_label)
     ax.set_xlabel(x_label)
     ax.set_ylim(y_lim)
@@ -91,15 +117,17 @@ def viz_scatterplot(x: list, y: list, title=None, x_label=None,
 def main() -> None:
     df = import_clean_data('MASTER_DATAFRAME.csv')
 
-    # Find number of institutions reporting crimes.
-    # x, y = count_institutions_by_col(df, 'YEAR')
-    # viz_scatterplot(x, y, title='Postsecondary 4 Year '
-    #                             'Institutions Reporting Crimes',
-    #                 x_label='Year',
-    #                 y_label='# of Institutions', y_lim=[0, 1500])
-
-    df.to_csv('FILTERED_MASTER.csv')
-
-
+    # Gather number of institutions in total that are reporting crimes.
+    year, inst_report = count_institutions_by_col(df, 'YEAR')
+    viz_scatterplot(year, inst_report, title='Postsecondary 4 Year Institutions ' +
+                    'Reporting Crimes', x_label='Year', 
+                    y_label='# of Institutions', y_lim=[0, 1500])
+    
+    rape_cols = [col for col in df.columns if 'RAPE' in col]
+    x, y = count_crimes(df, 'YEAR', rape_cols, 'SECTOR_DESC')
+    y['Total Institutions'] = inst_report
+    viz_scatterplot(x, y, title='Postsecondary 4 Year Institutions Reporting Rape',
+                    x_label='Year', y_label='# of Institutions')
+    
 if __name__ == "__main__":
     main()
