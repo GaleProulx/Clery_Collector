@@ -98,12 +98,10 @@ def viz_scatterplot(x: list, y: list, title=None, x_label=None,
     ax = plt.subplot()
     ax.set_title(title)
     
-    print(type(y))
-    print(isinstance(y, dict))
     if isinstance(y, dict):
         for key in y:
             ax.scatter(x, y[key], label=key)
-            ax.legend(loc=2)
+            ax.legend(loc=0)
     else:
         ax.scatter(x, y)
     ax.set_ylabel(y_label)
@@ -128,6 +126,17 @@ def main() -> None:
     y['Total Institutions'] = inst_report
     viz_scatterplot(x, y, title='Postsecondary 4 Year Institutions Reporting Rape',
                     x_label='Year', y_label='# of Institutions')
+    
+    x, y = count_crimes(df, 'YEAR', ['LIQUOR'], 'SECTOR_DESC')
+    y['Total Institutions'] = inst_report
+    viz_scatterplot(x, y, title='Postsecondary 4 Year Institutions Reporting Liquor Crimes',
+                    x_label='Year', y_label='# of Institutions')
+    
+    stat_cols = [col for col in df.columns if col not in INFO_COLS]
+    x, y = count_crimes(df, 'YEAR', stat_cols, 'SECTOR_DESC')
+    viz_scatterplot(x, y, title='Postsecondary 4 Year Institutions Total Crimes',
+                x_label='Year', y_label='# of Institutions')
+
     
 if __name__ == "__main__":
     main()
