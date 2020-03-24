@@ -14,6 +14,7 @@
 # IMPORT DEPENDENCIES & SET CONFIGURATION
 # ############################################################################
 import pandas as pd
+import matplotlib.font_manager as fm
 import matplotlib.pyplot as plt
 import altair as alt
 
@@ -136,9 +137,11 @@ def linear_regression(features: pd.DataFrame, target: pd.DataFrame):
 def viz_scatterplot(x: list, y: list, title=None, xaxis_label=None,
                     yaxis_label=None, y_lim=None, y_color=None, y_label=None,
                     y2=None, y2_color=None, y2_label=None, y3=None, 
-                    y3_color=None, y3_label=None, alpha=0.5):
+                    y3_color=None, y3_label=None, alpha=0.5, gridlines=False):
+    arvo = fm.FontProperties(fname='C:\\Users\\Gale Proulx\\Documents\\GitHub\\ix_anthology\\fonts\\Arvo-Regular.ttf')
+    glacial = fm.FontProperties(fname='C:\\Users\\Gale Proulx\\Documents\\GitHub\\ix_anthology\\fonts\\GlacialIndifference-Regular.otf')
     ax = plt.subplot()
-    ax.set_title(title)
+    ax.set_title(title, fontproperties=glacial, fontsize=15)
     ax.scatter(x, y, color=y_color, label=y_label, alpha=alpha)
     if y2 != None:
         ax.scatter(x, y2, color=y2_color, label=y2_label, alpha=alpha)
@@ -146,8 +149,16 @@ def viz_scatterplot(x: list, y: list, title=None, xaxis_label=None,
     if y3 != None:
         ax.scatter(x, y3, color=y3_color, label=y3_label, alpha=alpha)
         ax.legend()
-    ax.set_ylabel(yaxis_label)
-    ax.set_xlabel(xaxis_label)
+    if gridlines:
+        ax.yaxis.grid(True, which='major')
+        ax.xaxis.grid(True, which='major')
+    # Credit to Joe Kington for setting spine color effectively.
+    # https://stackoverflow.com/questions/7778954/elegantly-changing-the-color-of-a-plot-frame-in-matplotlib
+    for spine in ax.spines.values():
+        spine.set_edgecolor('gray')
+    ax.tick_params(colors='gray')
+    ax.set_ylabel(yaxis_label, color='gray', fontproperties=arvo)
+    ax.set_xlabel(xaxis_label, color='gray', fontproperties=arvo)
     ax.set_ylim(y_lim)
     plt.show()
 
