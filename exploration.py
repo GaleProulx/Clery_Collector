@@ -29,7 +29,7 @@ pd.set_option('display.max_columns', 20)
 pd.set_option('display.width', 1000)
 
 
-# IMPORT DEPENDENCIES & SET CONFIGURATION
+# FUNCTIONS
 # ############################################################################
 def count_institutions_by_col(df: pd.DataFrame, column: str) -> (list, list):
     filter_list = list()

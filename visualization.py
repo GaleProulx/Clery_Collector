@@ -30,7 +30,7 @@ pd.set_option('display.max_columns', 20)
 pd.set_option('display.width', 1000)
 
 
-# IMPORT DEPENDENCIES & SET CONFIGURATION
+# FUNCTIONS
 # ############################################################################
 def count_institutions_by_col(df: pd.DataFrame, column: str) -> (list, list):
     x_list = list()
@@ -140,26 +140,36 @@ def viz_scatterplot(x: list, y: list, title=None, xaxis_label=None,
                     y3_color=None, y3_label=None, alpha=0.5, gridlines=False):
     arvo = fm.FontProperties(fname='C:\\Users\\Gale Proulx\\Documents\\GitHub\\ix_anthology\\fonts\\Arvo-Regular.ttf')
     glacial = fm.FontProperties(fname='C:\\Users\\Gale Proulx\\Documents\\GitHub\\ix_anthology\\fonts\\GlacialIndifference-Regular.otf')
-    ax = plt.subplot()
-    ax.set_title(title, fontproperties=glacial, fontsize=15)
-    ax.scatter(x, y, color=y_color, label=y_label, alpha=alpha)
+    white = '#d1d1d1'
+    darkgray = '#313131'
+    marker_size = 80
+    
+    fig, ax = plt.subplots(facecolor=darkgray)
+    ax.set_facecolor(darkgray)
+    ax.set_title(title, fontproperties=glacial, fontsize=20, color=white, 
+                 pad=20)
+    ax.scatter(x, y, color=y_color, label=y_label, alpha=alpha, s=marker_size)
     if y2 != None:
-        ax.scatter(x, y2, color=y2_color, label=y2_label, alpha=alpha)
-        ax.legend()
+        ax.scatter(x, y2, color=y2_color, label=y2_label, alpha=alpha,
+                   s=marker_size)
+        ax.legend(fontsize=12, fancybox=True)
     if y3 != None:
-        ax.scatter(x, y3, color=y3_color, label=y3_label, alpha=alpha)
-        ax.legend()
+        ax.scatter(x, y3, color=y3_color, label=y3_label, alpha=alpha,
+                   s=marker_size)
+        ax.legend(fontsize=12, fancybox=True)
     if gridlines:
         ax.yaxis.grid(True, which='major')
         ax.xaxis.grid(True, which='major')
     # Credit to Joe Kington for setting spine color effectively.
     # https://stackoverflow.com/questions/7778954/elegantly-changing-the-color-of-a-plot-frame-in-matplotlib
     for spine in ax.spines.values():
-        spine.set_edgecolor('gray')
-    ax.tick_params(colors='gray')
-    ax.set_ylabel(yaxis_label, color='gray', fontproperties=arvo)
-    ax.set_xlabel(xaxis_label, color='gray', fontproperties=arvo)
+        spine.set_edgecolor('#d1d1d1')
+    ax.tick_params(colors=white)
+    ax.set_xlabel(xaxis_label, color=white, fontproperties=arvo, fontsize=15)
+    ax.set_ylabel(yaxis_label, color=white, fontproperties=arvo, fontsize=15)
     ax.set_ylim(y_lim)
+    plt.xticks(fontsize=13)
+    plt.yticks(fontsize=13)
     plt.show()
 
 
@@ -226,7 +236,7 @@ def main() -> None:
                                                  sectors, per_student=True, 
                                                  crimes=assault_cols)
     values = list(scatter_vals.values())
-    viz_scatterplot(values[0], values[1], title='Postsecondary 4 Year Institutions Reporting Aggrevated Assault Crimes',
+    viz_scatterplot(values[0], values[1], title='Postsecondary 4 Year Institutions Reporting Aggravated Assault Crimes',
                     xaxis_label='Year', yaxis_label='Reported Crimes Per 1000 Students', 
                     y_color='#4bcc4b', y_label='Public', y_lim=[0, 2.5],
                     y2=values[2], y2_label='Nonprofit', y2_color='#4b4bcc',
