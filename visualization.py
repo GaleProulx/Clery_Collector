@@ -137,7 +137,7 @@ def linear_regression(features: pd.DataFrame, target: pd.DataFrame):
 def viz_scatterplot(x: list, y: list, title=None, xaxis_label=None,
                     yaxis_label=None, y_lim=None, y_color=None, y_label=None,
                     y2=None, y2_color=None, y2_label=None, y3=None, 
-                    y3_color=None, y3_label=None, alpha=0.5, gridlines=False):
+                    y3_color=None, y3_label=None, alpha=0.8, gridlines=False):
     arvo = fm.FontProperties(fname='C:\\Users\\Gale Proulx\\Documents\\GitHub\\ix_anthology\\fonts\\Arvo-Regular.ttf')
     glacial = fm.FontProperties(fname='C:\\Users\\Gale Proulx\\Documents\\GitHub\\ix_anthology\\fonts\\GlacialIndifference-Regular.otf')
     white = '#d1d1d1'
@@ -184,7 +184,7 @@ def main() -> None:
     x, y = count_institutions_by_col(df, 'YEAR')
     viz_scatterplot(x, y, title='Postsecondary 4 Year '
                                 'Institutions Reporting Crimes',
-                    xaxis_label='Year',
+                    xaxis_label='Year', y_color='#648fff',
                     yaxis_label='# of Institutions', y_lim=[0, 1500])
     
     # Visualize number of institutions reporting crimes by sector.
@@ -193,22 +193,22 @@ def main() -> None:
     values = list(scatter_vals.values())
     viz_scatterplot(values[0], values[1], title='Postsecondary 4 Year Institutions Reporting Crimes by Sector',
                     xaxis_label='Year', yaxis_label='# of Institutions',
-                    y_color='#4bcc4b', y_label='Public', y_lim=[0, 1200],
-                    y2=values[2], y2_label='Nonprofit', y2_color='#4b4bcc',
-                    y3=values[3], y3_label='For-Profit', y3_color='#ff4b4b')
+                    y_color='#648fff', y_label='Public', y_lim=[0, 1200],
+                    y2=values[2], y2_label='Nonprofit', y2_color='#dc267f',
+                    y3=values[3], y3_label='For-Profit', y3_color='#fe6100')
     
     # Visualize number of Liquor Crimes per 1000 Students.
     x, y = count_inst_by_col_per_student(df, column='LIQUOR')
     viz_scatterplot(x, y, title='Postsecondary 4 Year '
                                 'Institutions Reporting Liquor Crimes',
-                    xaxis_label='Year', y_lim=[0, 45],
+                    xaxis_label='Year', y_lim=[0, 45], y_color='#648fff',
                     yaxis_label='Reported Crimes Per 1000 Students')
 
     # Visualize number of Burglary Crimes per 1000 Students.
     x, y = count_inst_by_col_per_student(df, column='BURGLA')
     viz_scatterplot(x, y, title='Postsecondary 4 Year '
                                 'Institutions Reporting Burglary Crimes',
-                    xaxis_label='Year',
+                    xaxis_label='Year', y_color='#648fff',
                     yaxis_label='Reported Crimes Per 1000 Students',y_lim=[0, 4])
     
     # Visualize number of Rape Crimes per 1000 Students.
@@ -216,7 +216,7 @@ def main() -> None:
     x, y = count_inst_by_col_per_student(df, columns=rape_cols)
     viz_scatterplot(x, y, title='Postsecondary 4 Year '
                                 'Institutions Reporting Rape Crimes',
-                    xaxis_label='Year',
+                    xaxis_label='Year', y_color='#648fff',
                     yaxis_label='Reported Crimes Per 1000 Students', y_lim=[0, 1.5])
     
     # Visualize number of Rape Crimes per 1000 Students by sector.
@@ -226,9 +226,9 @@ def main() -> None:
     values = list(scatter_vals.values())
     viz_scatterplot(values[0], values[1], title='Postsecondary 4 Year Institutions Reporting Rape Crimes',
                     xaxis_label='Year', yaxis_label='Reported Crimes Per 1000 Students', 
-                    y_color='#4bcc4b', y_label='Public', y_lim=[0, 2.5],
-                    y2=values[2], y2_label='Nonprofit', y2_color='#4b4bcc',
-                    y3=values[3], y3_label='For-Profit', y3_color='#ff4b4b')
+                    y_color='#648fff', y_label='Public', y_lim=[0, 2.5],
+                    y2=values[2], y2_label='Nonprofit', y2_color='#dc267f',
+                    y3=values[3], y3_label='For-Profit', y3_color='#fe6100')
     
     # Visualize number of Assault Crimes per 1000 Students by sector.
     assault_cols = [col for col in df.columns if 'AGG_A' in col]
@@ -238,9 +238,9 @@ def main() -> None:
     values = list(scatter_vals.values())
     viz_scatterplot(values[0], values[1], title='Postsecondary 4 Year Institutions Reporting Aggravated Assault Crimes',
                     xaxis_label='Year', yaxis_label='Reported Crimes Per 1000 Students', 
-                    y_color='#4bcc4b', y_label='Public', y_lim=[0, 2.5],
-                    y2=values[2], y2_label='Nonprofit', y2_color='#4b4bcc',
-                    y3=values[3], y3_label='For-Profit', y3_color='#ff4b4b')
+                    y_color='#648fff', y_label='Public', y_lim=[0, 2.5],
+                    y2=values[2], y2_label='Nonprofit', y2_color='#dc267f',
+                    y3=values[3], y3_label='For-Profit', y3_color='#fe6100')
     
     # Visualize number of Fondle Crimes per 1000 Students by sector.
     scatter_vals = count_institutions_by_two_col(df, 'YEAR', 'SECTOR_DESC', 
@@ -249,9 +249,9 @@ def main() -> None:
     values = list(scatter_vals.values())
     viz_scatterplot(values[0], values[1], title='Postsecondary 4 Year Institutions Reporting Fondle Crimes',
                     xaxis_label='Year', yaxis_label='Reported Crimes Per 1000 Students', 
-                    y_color='#4bcc4b', y_label='Public', y_lim=[0, 2.5],
-                    y2=values[2], y2_label='Nonprofit', y2_color='#4b4bcc',
-                    y3=values[3], y3_label='For-Profit', y3_color='#ff4b4b')
+                    y_color='#648fff', y_label='Public', y_lim=[0, 2.5],
+                    y2=values[2], y2_label='Nonprofit', y2_color='#dc267f',
+                    y3=values[3], y3_label='For-Profit', y3_color='#fe6100')
 
 
 if __name__ == "__main__":
