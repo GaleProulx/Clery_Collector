@@ -42,7 +42,7 @@ class TestCleryCollector(unittest.TestCase):
             'test_cleanly_import_data_firstdf_result.csv'
         )
 
-        # tseting if this is not the first dataframe in program
+        # testing if this is not the first dataframe in program
         import_not_first_df = clery_collector.cleanly_import_data(
             'test_files/test_cleanly_import_data/'
             'noncampusarrest070809.csv',
@@ -172,3 +172,7 @@ class TestCleryCollector(unittest.TestCase):
         generated_list = clery_collector.subtract_list(first_list, second_list)
         expected_list = ['Janeway', 'Kim', 'Tuvok', 'Torres', 'Chakotay']
         self.assertEqual(generated_list, expected_list)
+
+
+if __name__ == '__main__':
+    unittest.main()

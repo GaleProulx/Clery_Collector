@@ -59,8 +59,7 @@ EXPORT_FILE_NAME = 'MASTER_DATAFRAME.csv'
 # #####################################################################
 def cleanly_import_data(file_name: str, filter1: str, filter2: str,
                         filter3: str, year: int, middle_year: int,
-                        first_df: bool, report_type: str) \
-                        -> pd.DataFrame:
+                        first_df: bool, report_type: str) -> pd.DataFrame:
     df = pd.read_csv(file_name, low_memory=False)
 
     # capitalize all columns
